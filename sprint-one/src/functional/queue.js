@@ -14,9 +14,9 @@ var Queue = function(){
       // originally were. It will be a new position for the key/value pair, since we 
       // will be inserting a new key/value at index 0, and need to make room.
       for( var i = Object.keys(storage).length ; i > 0; i--){
-        // i in this case will be one index higher than the key/value pair we're
+        // i in the current case will be one index higher than the key/value pair we're
         // dealing with, when we use storage[i], it's creating a new index 1 step up
-        // from where our pair currently lives. We set this equal to the actual value
+        // from where our pair currently lives. We set the current i equal to the actual value
         // , storage[i - 1], which lifts that value up an index.
         storage[i] = storage[i - 1]; 
       }
