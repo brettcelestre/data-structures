@@ -1,8 +1,11 @@
 var Tree = function(value){
   var newTree = {};
   newTree.value = 0;
+
+  // Set children property to empty array (will be array of 'tree' objects)
   newTree.children = [];
 
+  // Extend newTree with treeMethods for functional-shared instantiation
   _.extend(newTree, treeMethods);
 
   return newTree;
@@ -11,60 +14,37 @@ var Tree = function(value){
 var treeMethods = {};
 
 treeMethods.addChild = function(value){
+  // Declare a child node with passed-in value
   var val = {"value": value, "children": []};
 
-  // New
+  // Extend new child node with treeMethods
   _.extend(val, treeMethods);
 
+  // Push new child node to children array
   this.children.push(val);
 };
 
 treeMethods.contains = function(target){
   var test = false;
-  var obj = this.children;
-
-  // for (var key in obj) {
-  //   if (obj[key].value === target) {
-  //     test = true;
-  //   } else {
-  //     obj = obj[key].value;
-  //   }
-  // }
+  var obj = this;
 
   var checkTarget = function(obj, target) {
-    if (Array.isArray(obj)) {
-      // Obj is an array
-      _.each(obj, function(element) {
-        
-      });
-    } else {
-      // Obj is an object
-      _.each(obj, function(element, key, list) {
-        if (element === target && key === 'value') {
+    // obj.children is array of node's child objects
+    if (obj.children.length > 0) {
+      // Loop through each child's children array
+      _.each(obj.children, function(child) {
+        // Check if child.value matches our target
+        if (child.value === target) {
           test = true;
-        } 
-        if (element.children.length > 0) {
-          checkTarget(element.children, target);
         }
+        // Recursively call this function with child object
+        checkTarget(child, target);
       });
     }
-    
   };
-
-  // console.log('Obj:', obj);
-
-  // for (var i = 0; i < obj.length; i++) {
-  //   console.log(obj);
-  //   // if (obj[i].value === target) {
-  //   //   test = true;
-  //   // }
-
-  //   // if (obj[i].children.length !== 0) {
-  //   //   obj = obj[i].children;
-  //   // }
-  // }
-
-  checkTarget(obj);
+  
+  // Initially call checkTarget to check
+  checkTarget(obj, target);
 
   return test;
 };
