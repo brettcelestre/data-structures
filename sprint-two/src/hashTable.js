@@ -5,61 +5,58 @@ var HashTable = function(){
 
 HashTable.prototype.insert = function(k, v){
   var i = getIndexBelowMaxForKey(k, this._limit);
-
-  // bucketArray = empty array
-  // valueTuple = [k,v]
-        // we will be pushing valueTuple into bucketArray
-        // bucketArray 
-
-  // if bucket[i] is not empty, loop through it and 
-      // push tuples(element) into bucketArray
-  // else
-    // check if bucket at i is null / undefined
-      // push new k,v tuple into bucketArray
-
-
-  // set bucket[i] = bucketArray
-          // ^
-    // (this._storage[i])
-
-
-
-
- //---------------------------------------
-
-  
-  // Use helper function .set to place v at index i inside of LimitedArray
-  // storage array
-  //this._storage.set(i, v);
-  //var obj = {k:v};
-  //var obj2 = _.defaults(this._storage.get(i), obj);
-
-  //console.log('obj2', obj2);
-
-  // this._storage.set(i, v);
-
-  // check if retrieve at k value !== i'th
-  // if (this._storage.get(i) !== null && this._storage.get(i) !== undefined) {
-  //   // this._storage.set(i, v);
-  //   console.log('this._storage.get(i)', this._storage.get(i));
-  //   console.log('this is full');
-  //   console.log('this._storage.get(i) after defaults', this._storage.get(i));
-  // }
-
+  // Create a newTuple, set eqaul to a new tuple array with our key/value
+  var newTuple = [k,v];
+  // Create a var, bucket, set equal empty array
+  var bucket = [];
+  // Check the main storage is not undefined
+  if (this._storage.get(i) !== undefined) {
+    // Iterate over the storage
+    _.each(this._storage.get(i), function(element) {
+      // push each element into our bucket array
+      bucket.push(element);
+    });
+  }
+  // This pushes the newTuple into our bucket array
+  bucket.push(newTuple);
+  // Use .set() on this._storage, the entire storage, on i and bucket
+  // This resets the entire storage array to bucket
+  this._storage.set(i, bucket);
 };
 
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  // Return the result of using the helper function .get on index i, which
-  // returns the value at i inside of LimitedArray storage array
-  return this._storage.get(i);
+  // Declare var bucket, set equal to entire storage array
+  var bucket = this._storage.get(i);
+  // Declare var value
+  var value;
+  // Iterate through the bucket's tuples
+  _.each(bucket, function(tuple) {
+    // If the current tuple's zeroth index equals k
+    if (tuple[0] === k) {
+      // Set value to the value of that tuple / the first index
+      value = tuple[1];
+    }
+  });
+  // Return value
+  return value;
 };
 
 HashTable.prototype.remove = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  // Use helper function .set to override index i's value inside of
-  // LimitedArray storage array with null
-  this._storage.set(i, null);
+  // Declare var bucket, set equal to the entire storage array
+  var bucket = this._storage.get(i);
+  // Iterate through the bucket's tuples
+  _.each(bucket, function(tuple) {
+    // Check if the zeroth index in the current tuple equals k
+    if (tuple[0] === k) {
+      // If true, set the value index to null
+      tuple[1] = null;
+    }
+  });
+  // Use .set() on this._storage, the entire storage, on i and bucket
+  // This resets the entire storage array to bucket
+  this._storage.set(i, bucket);
 };
 
 // Create a new instance of HashTable
