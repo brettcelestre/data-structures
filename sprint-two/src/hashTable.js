@@ -13,12 +13,25 @@ HashTable.prototype.insert = function(k, v){
   if (this._storage.get(i) !== undefined) {
     // Iterate over the storage
     _.each(this._storage.get(i), function(element) {
+      
       // push each element into our bucket array
       bucket.push(element);
     });
   }
   // This pushes the newTuple into our bucket array
+
+  
+
+  // ADJUST THIS
+  // Add conditional to check if tuple already exists in this bucket
+  // If so, OVERWRITE it
+
+
+
+
+
   bucket.push(newTuple);
+  console.log(bucket);
   // Use .set() on this._storage, the entire storage, on i and bucket
   // This resets the entire storage array to bucket
   this._storage.set(i, bucket);
