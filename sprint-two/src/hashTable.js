@@ -9,29 +9,38 @@ HashTable.prototype.insert = function(k, v){
   var newTuple = [k,v];
   // Create a var, bucket, set equal empty array
   var bucket = [];
+
   // Check the main storage is not undefined
   if (this._storage.get(i) !== undefined) {
     // Iterate over the storage
-    _.each(this._storage.get(i), function(element) {
+    _.each(this._storage.get(i), function(tuple) {
       
       // push each element into our bucket array
-      bucket.push(element);
+      bucket.push(tuple);
     });
   }
   // This pushes the newTuple into our bucket array
 
+  // if (1 > bucket.length) {
+  //   // if (!first) {
+  //     bucket.push(newTuple);
+  //     // first = true;
+  //   // }
+  // }
+
+  var overwriteFlag = false;
+
+  _.each(bucket, function(tuple) {
+    if (tuple[0] === k) {
+      tuple[1] = v;
+      overwriteFlag = true;
+    }
+  });
+
+  if (overwriteFlag === false){
+    bucket.push(newTuple);
+  }
   
-
-  // ADJUST THIS
-  // Add conditional to check if tuple already exists in this bucket
-  // If so, OVERWRITE it
-
-
-
-
-
-  bucket.push(newTuple);
-  console.log(bucket);
   // Use .set() on this._storage, the entire storage, on i and bucket
   // This resets the entire storage array to bucket
   this._storage.set(i, bucket);
@@ -77,22 +86,6 @@ var newHashTable = new HashTable();
 
 /*
  * Complexity: What is the time complexity of the above functions?
+
+
  */
-
-
-hashTable.retrieve('val1');
-
-
-[
-  {
-    'val1': 'val1',
-    'val2': 'val2'
-  }
-]
-
-
-[
-  {
-    'val2': 'val2'
-  }
-]
